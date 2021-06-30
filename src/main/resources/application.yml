@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql:///examonline?useUnicode=ture&characterEncoding=utf8
+    username: root
+    password: root
+server:
+  port: 8080

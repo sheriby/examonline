@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Manual Paper</title>
+  <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <script src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+  <script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+  <style>
+    div.title {
+      margin: 50px 0;
+    }
+
+    div.content {
+      margin-top: 50px;
+    }
+
+    form div.form-inline {
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    form div.form-inline div.form-group {
+      margin-right: 10px;
+    }
+
+    form div.form-inline div.form-group label {
+      margin-right: 10px;
+    }
+
+    form div.form-inline div.form-group:first-child input {
+      width: 80%;
+    }
+
+    form div.form-inline div.form-group:nth-child(2) input {
+      width: 50%;
+    }
+
+    form div.form-inline div.form-group:nth-child(3) input {
+      width: 30%;
+    }
+
+    form div.form-inline div.form-group:first-child {
+      width: 50%;
+    }
+
+    form div.form-inline div.form-group:nth-child(2) {
+      width: 20%;
+    }
+
+    form div.form-inline div.form-group:nth-child(3) {
+      width: 20%;
+    }
+
+    div.search div.form-inline:first-child {
+      padding: 10px;
+      border: 1px solid gray;
+      border-bottom: none;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    div.search div.form-inline:nth-child(2) {
+      padding: 10px;
+      border: 1px solid gray;
+      border-top: none;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    div.search div.form-inline select {
+      margin-right: 50px;
+    }
+
+    div.search div.form-inline label {
+      margin-right: 20px;
+    }
+
+    div.contentdiv {
+      width: 80%;
+    }
+
+    input#content {
+      width: 80%;
+    }
+
+    div.list {
+      margin-top: 50px;
+    }
+
+    div.list li {
+      margin-bottom: 20px;
+    }
+
+    span.select {
+      margin-right: 20px;
+    }
+
+    div.question {
+      padding: 10px;
+    }
+
+    div.content {
+      margin-bottom: 20px;
+    }
+
+    div.bot {
+      font-size: 12px;
+    }
+
+    div.bot > span {
+      margin-left: 10px;
+    }
+
+    li.list-group-item {
+      position: relative;
+    }
+
+    div.right {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="container title">
+    <h1 class="h1 text-center">手工组卷</h1>
+  </div>
+  <div class="container content">
+    <form class="form" th:action="@{/paper/preview}" method="post">
+      <input type="hidden" name="questions" id="questions">
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="title">试卷名</label>
+          <input type="text" name="title" id="title" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="teacherName">出卷人</label>
+          <input type="text" name="teacherName" id="teacherName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="examTime">考试时间</label>
+          <input type="text" name="examTime" id="examTime" class="form-control">
+          分钟
+        </div>
+        <button class="sub btn btn-success">组卷</button>
+      </div>
+    </form>
+  </div>
+  <div class="container search">
+    <div>
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="tname">教师姓名</label>
+          <select class="form-control" name="tname" id="tname">
+            <option></option>
+            <option th:each="name : ${nameLists}" th:text="${name}"></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="type">试题类型</label>
+          <select class="form-control" name="type" id="type">
+            <option></option>
+            <option th:each="type : ${typeLists}" th:text="${type}"></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="difficulty">难度</label>
+          <select class="form-control" name="difficulty" id="difficulty">
+            <option></option>
+            <option>简单</option>
+            <option>中等</option>
+            <option>较难</option>
+            <option>困难</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-inline">
+        <div class="form-group contentdiv">
+          <label for="type">试题内容</label>
+          <input type="text" class="form-control" name="content" id="content">
+        </div>
+        <button class="btn btn-primary sub2">查询</button>
+      </div>
+    </div>
+  </div>
+  <div id="question-container">
+    <div class="list container" th:fragment="questionlist">
+      <ul class="list-group">
+        <li class="list-group-item" th:each="question : ${questions}">
+          <div class="question" th:if="${question.isselect} != 0">
+            <div class="contentdiv" th:each="item, state : ${#strings.arraySplit(question.content, ';;')}"
+                 th:if="${state.index < 1}" th:text="${item}"></div>
+            <div>
+            <span class="select text-center" th:each="item, state : ${#strings.arraySplit(question.content, ';;')}"
+                  th:if="${state.index > 0}">
+              <span th:if="${state.index == 1}" th:text="A."></span>
+              <span th:if="${state.index == 2}" th:text="B."></span>
+              <span th:if="${state.index == 3}" th:text="C."></span>
+              <span th:if="${state.index == 4}" th:text="D."></span>
+              <span th:text="${item}"></span>
+            </span>
+            </div>
+          </div>
+          <div class="question" th:if="${question.isselect} == 0">
+            <div th:text="${question.content}"></div>
+          </div>
+          <div class="bot text-right">
+          <span>
+            出题人: <span th:text="${question.teacherName}"></span>
+          </span>
+            <span>
+            类型: <span th:text="${question.type}"></span>
+          </span>
+            <span>
+            难度: <span th:text="${question.difficulty}"></span>
+          </span>
+          </div>
+          <div class="right">
+            <button th:attr="data-id=${question.id}" class="badge badge-primary border-primary add">添加</button>
+            <button th:attr="data-id=${question.id}" class="badge badge-danger border-danger cancel">取消</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div id="element" class="position-fixed top-0 right-0 p-3" style="z-index: 5; right: 0; top: 10px;">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+    <div class="toast-header">
+      <strong class="mr-auto">手动组卷</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      试题已成功添加或修改
+    </div>
+  </div>
+</div>
+</body>
+<script>
+  $(function () {
+    let queslist = []
+    const toast = $('#liveToast')
+    toast.toast({
+      delay: 300
+    })
+    $('button.sub2').click(()=>{
+      $('#question-container').load('/question/querypaper', {
+        teacherName: $('#tname').val(),
+        type: $('#type').val(),
+        difficulty: $('#difficulty').val(),
+        content: $('#content').val()
+      })
+
+      $('button.sub').click(()=>{
+        let str = ''
+        for (let qus of queslist) {
+          str += qus
+          str += ';'
+        }
+        $('#questions').val(str)
+      })
+
+      setTimeout(()=>{
+        $('button.add').each((index, item)=>{
+          const _this = item;
+          $(item).click(()=>{
+            const id = $(_this).data('id')
+            if (queslist.indexOf(id) === -1) {
+              queslist.push(id)
+            }
+            toast.toast('show')
+            console.log(queslist)
+          })
+        })
+        $('button.cancel').each((index, item)=>{
+          const _this = item;
+          $(item).click(()=>{
+            const id = $(_this).data('id')
+            const index = queslist.indexOf(id)
+            if (index > -1) {
+              queslist.splice(index, 1)
+            }
+            toast.toast('show')
+          })
+        })
+
+      }, 1000)
+    })
+
+
+  })
+</script>
+</html>

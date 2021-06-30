@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Paper</title>
+  <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <script src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+  <script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+  <style>
+    div.title {
+      margin-top: 50px;
+    }
+
+    div.content {
+      margin-top: 50px;
+      width: 400px;
+      height: 500px;
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="container title">
+    <h1 class="h1 text-center">自动组卷</h1>
+  </div>
+  <div class="content container">
+    <form th:action="@{/paper/autopaper}" method="post">
+      <div class="form-group">
+        <label for="title">试卷名</label>
+        <input type="text" name="title" id="title" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="teacherName">出卷人</label>
+        <input type="text" name="teacherName" id="teacherName" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="examTime">考试时间(分钟)</label>
+        <input type="text" name="examTime" id="examTime" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="number">题目数量</label>
+        <input type="text" name="number" id="number" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="difficulty">难度</label>
+        <select name="difficulty" id="difficulty" class="form-control">
+          <option>简单</option>
+          <option>中等</option>
+          <option>较难</option>
+          <option>困难</option>
+        </select>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-secondary" href="javascript:window.history.go(-1)">取消</a>
+        <button class="btn btn-primary float-right">确定</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Exam Online System</title>
+  <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <script src="../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+  <script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+  <style>
+    a {
+      color: white;
+      text-decoration: none;
+      border: none;
+    }
+
+    a span{
+      color: white;
+    }
+
+    div.container.top {
+      padding: 50px;
+    }
+
+    div.content {
+      margin-top: 50px;
+    }
+
+    div.content .btn {
+      height: 160px;
+      width: 160px;
+      margin: 20px;
+      font-size: 26px;
+      padding-top: 55px;
+    }
+    div.logout {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    a {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="container top text-center">
+    <h1>基于WEB的通用试题库组卷系统</h1>
+    <div class="text-right">欢迎登录，<span th:text="${session.user.username}"></span></div>
+  </div>
+  <div class="container content text-center">
+    <a class="btn btn-secondary" th:if="${session.user.role == 'admin'}" th:href="@{/addq}"><span>录入试题</span></a>
+    <a class="btn btn-info" th:href="@{/queryq}"><span>查询试题</span></a>
+    <a class="btn btn-primary" th:if="${session.user.role == 'admin'}" th:href="@{/paper}"><span>组卷系统</span></a>
+    <a class="btn btn-success" th:href="@{/onlineexam}"><span>在线考试</span></a>
+  </div>
+  <div class="logout">
+    <a th:href="@{/logout}" class="btn btn-danger">退出登录</a>
+  </div>
+</div>
+</body>
+</html>

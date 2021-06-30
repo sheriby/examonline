@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+  <script src="../static/js/jquery.js" th:src="@{js/jquery.js}"></script>
+  <script src="../static/js/popper.min.js" th:src="@{js/popper.min.js}"></script>
+  <script src="../static/js/bootstrap.min.js" th:src="@{js/bootstrap.min.js}"></script>
+  <style>
+
+    div.login {
+      margin: 100px auto 0;
+      width: 400px;
+      height: 600px;
+      border: 1px solid gray;
+      padding: 80px 25px;
+    }
+
+    div.form-group {
+      margin: 20px 0;
+    }
+
+    button.btn.right {
+      float: right;
+    }
+
+    div.buttons {
+      margin-top: 80px;
+    }
+  </style>
+</head>
+<body>
+<div class="container login">
+  <div class="form">
+    <form th:action="@{user/signup}" method="post">
+      <h2 class="text-center">注册</h2>
+      <div class="form-group">
+        <label for="username">账户</label>
+        <input type="text" name="username" id="username" class="form-control" required>
+        <div class="invalid-feedback">
+          账户不能为空
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" name="password" id="password" class="form-control" required>
+        <div class="invalid-feedback">
+          密码不能为空
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password2">再次输入密码</label>
+        <input type="password" name="password2" id="password2" class="form-control" required>
+        <div class="invalid-feedback">
+          请输入相同的密码
+        </div>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-secondary" href="javascript:window.history.go(-1)">取消</a>
+        <button class="btn btn-primary right sub">注册</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+<script>
+  $(function () {
+    function empty(str) {
+      return str === null || str === undefined || str === '';
+    }
+    $('button.sub').on("click", ()=>{
+      let valid = true
+      const name = $('#username')
+      name.removeClass('is-invalid')
+      if (empty(name.val())) {
+        name.addClass('is-invalid')
+        valid = false
+      }
+      const p1 = $('#password')
+      console.log(p1.val())
+      p1.removeClass('is-invalid')
+      if (empty(p1.val())) {
+        p1.addClass('is-invalid')
+        valid = false
+      }
+      const p2 = $('#password2')
+      p2.removeClass('is-invalid')
+      if (p1.val() !== p2.val()) {
+        p2.addClass('is-invalid')
+        valid = false
+      }
+      if (valid) {
+        $('form').submit()
+      }else {
+        return false
+      }
+    })
+  })
+</script>
+</html>
